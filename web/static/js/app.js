@@ -1,13 +1,24 @@
 import {Socket} from "phoenix"
 
-// let socket = new Socket("/ws")
-// socket.connect()
-// let chan = socket.chan("topic:subtopic", {})
-// chan.join().receive("ok", chan => {
-//   console.log("Success!")
-// })
+let input  = $("input#word")
+let button = $("button#send")
+let log    = $("ul#log")
 
-let App = {
-}
+let socket = new Socket("/ws")
+socket.connect()
 
-export default App
+let chan = socket.chan("topic:general", {})
+
+button.on("click", e => {
+  chan.push("new:msg", {body: input.val()})
+  input.val("")
+})
+
+chan.on("bc:msg", payload => {
+  let row = $('<li />').text(payload.body);
+  log.append(row)
+})
+
+chan.join().receive("ok", chan => {
+  console.log("joined")
+})

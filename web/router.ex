@@ -12,6 +12,10 @@ defmodule Shout.Router do
     plug :accepts, ["json"]
   end
 
+  socket "/ws", Shout do
+    channel "topic:*", ShoutChannel
+  end
+
   scope "/", Shout do
     pipe_through :browser # Use the default browser stack
 
