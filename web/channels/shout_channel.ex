@@ -10,4 +10,10 @@ defmodule Shout.ShoutChannel do
     broadcast! socket, "bc:msg", message
     {:noreply, socket}
   end
+
+  def handle_out("bc:msg", %{"body" => body}, socket) do
+    body = body <> "!!!!"
+    push socket, "bc:msg", %{"body" => body}
+    {:noreply, socket}
+  end
 end
