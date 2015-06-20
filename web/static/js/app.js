@@ -2,6 +2,7 @@ import {Socket} from "phoenix"
 
 let input  = $("input#word")
 let button = $("button#send")
+let log    = $("ul#log")
 
 let socket = new Socket("/ws")
 socket.connect()
@@ -13,6 +14,11 @@ button.on("click", e => {
   input.val("")
 })
 
+chan.on("bc:msg", payload => {
+  let row = $('<li />').text(payload.body);
+  log.append(row)
+})
+
 chan.join().receive("ok", chan => {
-    console.log("joined")
+  console.log("joined")
 })
