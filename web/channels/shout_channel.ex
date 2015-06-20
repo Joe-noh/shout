@@ -5,4 +5,9 @@ defmodule Shout.ShoutChannel do
     IO.puts "joined"
     {:ok, socket}
   end
+
+  def handle_in("new:msg", message, socket) do
+    broadcast! socket, "bc:msg", message
+    {:noreply, socket}
+  end
 end
